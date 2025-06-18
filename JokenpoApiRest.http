@@ -1,0 +1,6 @@
+@JokenpoApiRest_HostAddress = http://localhost:5176
+
+GET {{JokenpoApiRest_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
