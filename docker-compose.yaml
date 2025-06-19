@@ -1,0 +1,34 @@
+services:
+  postgres-db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  development:
+    working_dir: /app
+    build:
+      context: .
+    depends_on:
+      - postgres-db
+    environment:
+      ConnectionStrings__DefaultConnection: ${DB_CONNECTION_STRING}
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "5176:80"
+    volumes:
+      - ./:/app                                  # só o código-fonte
+      - api_bin:/app/bin                         # mantém os binários do build
+      - api_obj:/app/obj                         # mantém os arquivos intermediários
+      - ~/.nuget/packages:/root/.nuget/packages  # cache de pacotes nuget
+
+volumes:
+  db_data:
+  api_bin:
+  api_obj:
