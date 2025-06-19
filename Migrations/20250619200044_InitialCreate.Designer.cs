@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JokenpoApiRest.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250619041221_InitialCreate")]
+    [Migration("20250619200044_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,6 +54,8 @@ namespace JokenpoApiRest.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("WinnerHandId", "LoserHandId");
+
+                    b.HasIndex("LoserHandId");
 
                     b.ToTable("HandRelations");
                 });
@@ -115,6 +117,25 @@ namespace JokenpoApiRest.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("JokenpoApiRest.Models.HandRelation", b =>
+                {
+                    b.HasOne("JokenpoApiRest.Models.Hand", "LoserHand")
+                        .WithMany()
+                        .HasForeignKey("LoserHandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JokenpoApiRest.Models.Hand", "WinnerHand")
+                        .WithMany()
+                        .HasForeignKey("WinnerHandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LoserHand");
+
+                    b.Navigation("WinnerHand");
                 });
 
             modelBuilder.Entity("JokenpoApiRest.Models.Participation", b =>

@@ -13,18 +13,6 @@ namespace JokenpoApiRest.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "HandRelations",
-                columns: table => new
-                {
-                    WinnerHandId = table.Column<int>(type: "integer", nullable: false),
-                    LoserHandId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HandRelations", x => new { x.WinnerHandId, x.LoserHandId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Hands",
                 columns: table => new
                 {
@@ -65,6 +53,30 @@ namespace JokenpoApiRest.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HandRelations",
+                columns: table => new
+                {
+                    WinnerHandId = table.Column<int>(type: "integer", nullable: false),
+                    LoserHandId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HandRelations", x => new { x.WinnerHandId, x.LoserHandId });
+                    table.ForeignKey(
+                        name: "FK_HandRelations_Hands_LoserHandId",
+                        column: x => x.LoserHandId,
+                        principalTable: "Hands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HandRelations_Hands_WinnerHandId",
+                        column: x => x.WinnerHandId,
+                        principalTable: "Hands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Participations",
                 columns: table => new
                 {
@@ -93,6 +105,11 @@ namespace JokenpoApiRest.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HandRelations_LoserHandId",
+                table: "HandRelations",
+                column: "LoserHandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hands_Name",

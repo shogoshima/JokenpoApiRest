@@ -53,7 +53,7 @@ O sistema terá algumas funcionalidades:
 4. Para rodar as migrations (no modo de desenvolvimento):
 
     ```bash
-    export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres" & dotnet ef database update
+    export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres" && dotnet ef database update
     ```
 
 ## Decisões de Arquitetura
