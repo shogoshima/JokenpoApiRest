@@ -1,4 +1,6 @@
 using JokenpoApiRest.Data;
+using JokenpoApiRest.Services;
+using JokenpoApiRest.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +13,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Adicionando serviços
+// Cada instância será criada uma vez por requisição HTTP
+builder.Services.AddScoped<IParticipationService, ParticipationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoundService, RoundService>();
+builder.Services.AddScoped<IHandService, HandService>();
+
+// Registra supoerte a controllers com atributos (essencial para webapi)
 builder.Services.AddControllers();
+
+// Documentação da API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
