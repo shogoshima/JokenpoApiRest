@@ -63,7 +63,7 @@ namespace JokenpoApiRest.Migrations
                     b.Property<int>("RoundId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("HandId")
+                    b.Property<int?>("HandId")
                         .HasColumnType("integer");
 
                     b.HasKey("UserId", "RoundId");
@@ -118,9 +118,7 @@ namespace JokenpoApiRest.Migrations
                 {
                     b.HasOne("JokenpoApiRest.Models.Hand", "Hand")
                         .WithMany()
-                        .HasForeignKey("HandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HandId");
 
                     b.HasOne("JokenpoApiRest.Models.Round", "Round")
                         .WithMany()

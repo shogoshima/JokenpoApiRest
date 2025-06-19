@@ -70,7 +70,7 @@ namespace JokenpoApiRest.Migrations
                 {
                     RoundId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    HandId = table.Column<int>(type: "integer", nullable: false)
+                    HandId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,8 +79,7 @@ namespace JokenpoApiRest.Migrations
                         name: "FK_Participations_Hands_HandId",
                         column: x => x.HandId,
                         principalTable: "Hands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Participations_Rounds_RoundId",
                         column: x => x.RoundId,

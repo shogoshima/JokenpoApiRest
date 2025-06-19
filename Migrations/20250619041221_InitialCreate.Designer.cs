@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JokenpoApiRest.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250619021448_InitialCreate")]
+    [Migration("20250619041221_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -66,7 +66,7 @@ namespace JokenpoApiRest.Migrations
                     b.Property<int>("RoundId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("HandId")
+                    b.Property<int?>("HandId")
                         .HasColumnType("integer");
 
                     b.HasKey("UserId", "RoundId");
@@ -121,9 +121,7 @@ namespace JokenpoApiRest.Migrations
                 {
                     b.HasOne("JokenpoApiRest.Models.Hand", "Hand")
                         .WithMany()
-                        .HasForeignKey("HandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HandId");
 
                     b.HasOne("JokenpoApiRest.Models.Round", "Round")
                         .WithMany()
