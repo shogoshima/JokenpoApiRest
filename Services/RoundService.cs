@@ -2,6 +2,7 @@ using JokenpoApiRest.Data;
 using JokenpoApiRest.Models;
 using JokenpoApiRest.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace JokenpoApiRest.Services;
 
@@ -9,11 +10,16 @@ public class RoundService(AppDbContext db) : IRoundService
 {
   private readonly AppDbContext _db = db;
 
-  public async Task<IEnumerable<Round>> GetAllAsync()
+  public async Task<IEnumerable<Round>> GetAllAsync(
+    Expression<Func<Round, bool>>? filter = null)
   {
-    return await _db.Rounds
-                    .AsNoTracking()
-                    .ToListAsync();
+    IQueryable<Round> query = _db.Rounds
+                    .AsNoTracking();
+
+    if (filter != null)
+      query = query.Where(filter);
+
+    return await query.ToListAsync();
   }
 
   public async Task<Round?> GetByIdAsync(int id)
@@ -21,7 +27,7 @@ public class RoundService(AppDbContext db) : IRoundService
     return await _db.Rounds
                     .AsNoTracking()
                     .FirstOrDefaultAsync(r =>
-                      r.Id == id);
+                        r.Id == id);
   }
 
   public async Task<Round> CreateAsync(Round round)

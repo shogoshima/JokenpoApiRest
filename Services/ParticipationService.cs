@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using JokenpoApiRest.Data;
 using JokenpoApiRest.Models;
 using JokenpoApiRest.Services.Interfaces;
@@ -9,17 +10,23 @@ public class ParticipationService(AppDbContext db) : IParticipationService
 {
   private readonly AppDbContext _db = db;
 
-  public async Task<IEnumerable<Participation>> GetAllAsync()
+  public async Task<IEnumerable<Participation>> GetAllAsync(
+    Expression<Func<Participation, bool>>? filter = null)
   {
-    return await _db.Participations
-                    .Include(p => p.User)
-                    .Include(p => p.Round)
-                    .Include(p => p.Hand)
-                    .AsNoTracking()
-                    .ToListAsync();
+    // Não expor as jogadas escolhidas dos usuários
+    IQueryable<Participation> query = _db.Participations
+                                          .Include(p => p.User)
+                                          .Include(p => p.Round)
+                                          .Include(p => p.Hand)
+                                          .AsNoTracking();
+
+    if (filter != null)
+      query = query.Where(filter);
+
+    return await query.ToListAsync();
   }
 
-  public async Task<Participation?> GetByIdAsync(int roundId, int userId)
+  public async Task<Participation?> GetByIdAsync(int userId, int roundId)
   {
     return await _db.Participations
                     .Include(p => p.User)
@@ -27,8 +34,8 @@ public class ParticipationService(AppDbContext db) : IParticipationService
                     .Include(p => p.Hand)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(p =>
-                        p.RoundId == roundId &&
-                        p.UserId == userId);
+                        p.UserId == userId &&
+                        p.RoundId == roundId);
   }
 
   public async Task<Participation> CreateAsync(Participation participation)
@@ -42,8 +49,8 @@ public class ParticipationService(AppDbContext db) : IParticipationService
   {
     var exists = await _db.Participations
                           .AnyAsync(p =>
-                              p.RoundId == participation.RoundId &&
-                              p.UserId == participation.UserId);
+                              p.UserId == participation.UserId &&
+                              p.RoundId == participation.RoundId);
 
     if (!exists) return false;
 
@@ -52,10 +59,10 @@ public class ParticipationService(AppDbContext db) : IParticipationService
     return true;
   }
 
-  public async Task<bool> DeleteAsync(int roundId, int userId)
+  public async Task<bool> DeleteAsync(int userId, int roundId)
   {
     var participation = await _db.Participations
-                                 .FindAsync(roundId, userId);
+                                 .FindAsync(userId, roundId);
     if (participation == null) return false;
 
     _db.Participations.Remove(participation);
