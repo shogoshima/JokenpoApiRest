@@ -18,6 +18,7 @@ builder.Services.AddScoped<IParticipationService, ParticipationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoundService, RoundService>();
 builder.Services.AddScoped<IHandService, HandService>();
+builder.Services.AddScoped<IHandRelationService, HandRelationService>();
 
 // Registra supoerte a controllers com atributos (essencial para webapi)
 builder.Services.AddControllers();
@@ -34,5 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapControllers();
 
 app.Run();

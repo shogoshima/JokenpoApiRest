@@ -91,7 +91,7 @@ Abaixo seguem as rotas criadas para a API REST. Essas informações poderão ser
 - `GET /rounds/{roundId}`: Consultar a situação de uma rodada específica.
 - `POST /rounds`: Criar uma nova rodada (retorna erro se já houver uma rodada aberta).
 - `POST /rounds/{roundId}/participations`: Cadastrar o usuário na rodada (sem jogada).
-- `PUT /rounds/{roundId}/participations/{userId}`: Atualizar a jogada do usuário na rodada.
+- `PUT /rounds/{roundId}/participations`: Atualizar a jogada do usuário na rodada.
 - `DELETE /rounds/{roundId}/participations/{userId}`: Remover a participação do usuário na rodada (se ela ainda estiver aberta).
 - `POST /rounds/{roundId}/finalize`: Finalizar a rodada atual. Muda status para "closed", calcula vencedor e retorna resultado.
 
