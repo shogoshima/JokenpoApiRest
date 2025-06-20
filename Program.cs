@@ -36,6 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Mapeando os controllers criados
 app.MapControllers();
 
 app.Run();

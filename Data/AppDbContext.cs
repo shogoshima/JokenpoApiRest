@@ -3,9 +3,11 @@ using JokenpoApiRest.Models;
 
 namespace JokenpoApiRest.Data;
 
-// Criação da classe utilizada para manusear o banco de dados
-// Ele aceita configurações de conexão (string, provedor, etc.)
-// Sendo herdado de DbContext, será possível utilizar as ferramentas do EntityFrameworkCore
+/// <summary>
+/// Criação da classe utilizada para manusear o banco de dados. 
+/// Sendo herdado de DbContext, será possível utilizar as ferramentas do EntityFrameworkCore
+/// </summary>
+/// <param name="options">Configurações de conexão</param>
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
   // Declarando as tabelas

@@ -4,6 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JokenpoApiRest.Controllers;
 
+/// <summary>
+/// Gerencia operações relacionadas às rodadas:
+/// <list type="bullet">
+/// <item>
+/// <description>Consultar rodada</description>
+/// </item>
+/// <item>
+/// <description>Criar nova rodada</description>
+/// </item>
+/// <item>
+/// <description>Registar, atualizar e excluir participações</description>
+/// </item>
+/// <item>
+/// <description>Finalizar rodada e calcular vencedores</description>
+/// </item>
+/// </list>
+/// </summary>
 [ApiController]
 [Route("api/rounds")]
 public class RoundsController(
@@ -19,7 +36,15 @@ public class RoundsController(
   private readonly IHandService _handService = handService;
   private readonly IHandRelationService _handRelationService = handRelationService;
 
+  /// <summary>
+  /// Obtém a rodada aberta atual, junto com usuários que já jogaram e os pendentes
+  /// </summary>
+  /// <returns>
+  /// Erro ou rodada atual com participantes associados.
+  /// </returns>
   [HttpGet("current")]
+  [ProducesResponseType(typeof(RoundDto), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   public async Task<IActionResult> GetCurrentOpenRound()
   {
     var open = await _roundService.GetAllAsync(r => r.Status == RoundStatus.Open);
@@ -36,10 +61,18 @@ public class RoundsController(
     var pendingUsers = pending.Select(p => p.User!.Name);
 
     // Retorna a rodada, os jogadores que jogaram e aqueles que ainda não jogaram
-    return Ok(new { round, playedUsers, pendingUsers });
+    return Ok(new RoundDto { Data = round, PlayedUsers = playedUsers, PendingUsers = pendingUsers });
   }
 
+  /// <summary>
+  /// Obtém uma rodada pelo seu identificador, incluindo status e listas de usuários
+  /// </summary>
+  /// <returns>
+  /// Erro ou a rodada com participantes associados.
+  /// </returns>
   [HttpGet("{id}")]
+  [ProducesResponseType(typeof(RoundDto), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   public async Task<IActionResult> GetById(int id)
   {
     var round = await _roundService.GetByIdAsync(id);
@@ -55,10 +88,18 @@ public class RoundsController(
     var pendingUsers = pending.Select(p => p.User!.Name);
 
     // Retorna as rodadas, os jogadores que jogaram e aqueles que ainda não jogaram
-    return Ok(new { round, playedUsers, pendingUsers });
+    return Ok(new RoundDto { Data = round, PlayedUsers = playedUsers, PendingUsers = pendingUsers });
   }
 
+  /// <summary>
+  /// Cria uma nova rodada aberta.
+  /// </summary>
+  /// <returns>
+  /// Erro, ou a nova rodada criada.
+  /// </returns>
   [HttpPost]
+  [ProducesResponseType(typeof(Round), StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status409Conflict)]
   public async Task<IActionResult> CreateNewRound()
   {
     var open = await _roundService.GetAllAsync(r => r.Status == RoundStatus.Open);
@@ -71,7 +112,17 @@ public class RoundsController(
       newRound);
   }
 
+  /// <summary>
+  /// Registra a participação de um usuário em uma rodada
+  /// </summary>
+  /// <returns>
+  /// Erro, ou 204 No Content se sucesso.
+  /// </returns>
   [HttpPost("{id}/participations")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status409Conflict)]
   public async Task<IActionResult> RegisterParticipation(
     int id,
     [FromBody] ParticipationDto dto)
@@ -106,7 +157,17 @@ public class RoundsController(
     return NoContent();
   }
 
+  /// <summary>
+  /// Atualiza a jogada de um usuário em uma rodada.
+  /// </summary>
+  /// <returns>
+  /// Erro, ou 204 No Content se sucesso.
+  /// </returns>
   [HttpPut("{id}/participations")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status409Conflict)]
   public async Task<IActionResult> UpdateParticipation(
     int id,
     [FromBody] ParticipationDto dto)
@@ -139,7 +200,16 @@ public class RoundsController(
     return NoContent();
   }
 
+  /// <summary>
+  /// Remove a participação de um usuário em uma rodada.
+  /// </summary>
+  /// <returns>
+  /// Erro, ou 204 No Content se sucesso.
+  /// </returns>
   [HttpDelete("{id}/participations/{userId}")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status409Conflict)]
   public async Task<IActionResult> DeleteParticipation(int id, int userId)
   {
     var round = await _roundService.GetByIdAsync(id);
@@ -157,7 +227,17 @@ public class RoundsController(
     return NoContent();
   }
 
+  /// <summary>
+  /// Finaliza uma rodada, calcula e retorna os vencedores.
+  /// </summary>
+  /// <returns>
+  /// Erro, ou um objeto com os vencedores.
+  /// </returns>
   [HttpPost("{id}/finalize")]
+  [ProducesResponseType(typeof(RoundResultsDto), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status409Conflict)]
   public async Task<IActionResult> FinalizeRound(int id)
   {
     // Checa dados da rodada
@@ -218,6 +298,6 @@ public class RoundsController(
     // Finaliza a rodada
     round.Status = RoundStatus.Closed;
     await _roundService.UpdateAsync(round);
-    return Ok(new { winners });
+    return Ok(new RoundResultsDto { Winners = winners });
   }
 }

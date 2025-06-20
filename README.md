@@ -2,16 +2,16 @@
 
 ## Introdução
 
-Este é um projeto voltado para desenvolver a solução para o teste técnico do processo seletivo da **BTG Pactual**.
+Este é um projeto para o teste técnico do processo seletivo da **BTG Pactual**.
 
 O projeto consiste em um sistema que disponibiliza APIs REST para realizar as atividades de um jogo de jokenpo.
 
 ### Funcionalidades
 
-O sistema terá algumas funcionalidades:
+O sistema terá as seguintes funcionalidades:
 
 - Cadastrar um jogador
-  
+
   O jogador pode se cadastrar no sistema
 
 - Cadastrar a jogada
