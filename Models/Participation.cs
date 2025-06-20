@@ -6,7 +6,7 @@ public class Participation
   public int UserId { get; set; }
   public int? HandId { get; set; }
 
-  public required Round Round { get; set; }
-  public required User User { get; set; }
+  public Round? Round { get; set; }
+  public User? User { get; set; }
   public Hand? Hand { get; set; }
 }

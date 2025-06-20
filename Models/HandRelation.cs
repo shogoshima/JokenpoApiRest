@@ -5,6 +5,6 @@ public class HandRelation
   public int WinnerHandId { get; set; }
   public int LoserHandId { get; set; }
 
-  public required Hand WinnerHand { get; set; }
-  public required Hand LoserHand { get; set; }
+  public Hand? WinnerHand { get; set; }
+  public Hand? LoserHand { get; set; }
 }

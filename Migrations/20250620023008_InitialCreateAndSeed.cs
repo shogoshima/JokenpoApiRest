@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace JokenpoApiRest.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateAndSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -104,6 +106,35 @@ namespace JokenpoApiRest.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Hands",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Pedra" },
+                    { 2, "Papel" },
+                    { 3, "Tesoura" },
+                    { 4, "Spock" },
+                    { 5, "Lagarto" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "HandRelations",
+                columns: new[] { "LoserHandId", "WinnerHandId" },
+                values: new object[,]
+                {
+                    { 3, 1 },
+                    { 5, 1 },
+                    { 1, 2 },
+                    { 4, 2 },
+                    { 2, 3 },
+                    { 5, 3 },
+                    { 1, 4 },
+                    { 3, 4 },
+                    { 2, 5 },
+                    { 4, 5 }
                 });
 
             migrationBuilder.CreateIndex(

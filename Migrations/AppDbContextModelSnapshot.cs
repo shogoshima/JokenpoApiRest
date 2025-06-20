@@ -40,6 +40,33 @@ namespace JokenpoApiRest.Migrations
                         .IsUnique();
 
                     b.ToTable("Hands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Pedra"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Papel"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Tesoura"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Spock"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Lagarto"
+                        });
                 });
 
             modelBuilder.Entity("JokenpoApiRest.Models.HandRelation", b =>
@@ -55,6 +82,58 @@ namespace JokenpoApiRest.Migrations
                     b.HasIndex("LoserHandId");
 
                     b.ToTable("HandRelations");
+
+                    b.HasData(
+                        new
+                        {
+                            WinnerHandId = 1,
+                            LoserHandId = 3
+                        },
+                        new
+                        {
+                            WinnerHandId = 1,
+                            LoserHandId = 5
+                        },
+                        new
+                        {
+                            WinnerHandId = 2,
+                            LoserHandId = 1
+                        },
+                        new
+                        {
+                            WinnerHandId = 2,
+                            LoserHandId = 4
+                        },
+                        new
+                        {
+                            WinnerHandId = 3,
+                            LoserHandId = 2
+                        },
+                        new
+                        {
+                            WinnerHandId = 3,
+                            LoserHandId = 5
+                        },
+                        new
+                        {
+                            WinnerHandId = 4,
+                            LoserHandId = 1
+                        },
+                        new
+                        {
+                            WinnerHandId = 4,
+                            LoserHandId = 3
+                        },
+                        new
+                        {
+                            WinnerHandId = 5,
+                            LoserHandId = 4
+                        },
+                        new
+                        {
+                            WinnerHandId = 5,
+                            LoserHandId = 2
+                        });
                 });
 
             modelBuilder.Entity("JokenpoApiRest.Models.Participation", b =>

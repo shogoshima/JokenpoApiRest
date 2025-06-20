@@ -37,6 +37,29 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<Hand>()
         .HasIndex(h => h.Name)
         .IsUnique();
+
+    // Populando a tabela de jogadas possíveis
+    modelBuilder.Entity<Hand>().HasData(
+      new Hand { Id = 1, Name = "Pedra" },
+      new Hand { Id = 2, Name = "Papel" },
+      new Hand { Id = 3, Name = "Tesoura" },
+      new Hand { Id = 4, Name = "Spock" },
+      new Hand { Id = 5, Name = "Lagarto" }
+    );
+
+    // Populando a tabela de relações entre jogadas
+    modelBuilder.Entity<HandRelation>().HasData(
+      new { WinnerHandId = 1, LoserHandId = 3 }, // Pedra ganha de tesoura
+      new { WinnerHandId = 1, LoserHandId = 5 }, // Pedra ganha de lagarto
+      new { WinnerHandId = 2, LoserHandId = 1 }, // Papel ganha de pedra
+      new { WinnerHandId = 2, LoserHandId = 4 }, // Papel ganha de spock
+      new { WinnerHandId = 3, LoserHandId = 2 }, // Tesoura ganha de papel
+      new { WinnerHandId = 3, LoserHandId = 5 }, // Tesoura ganha de lagarto
+      new { WinnerHandId = 4, LoserHandId = 1 }, // Spock ganha de pedra
+      new { WinnerHandId = 4, LoserHandId = 3 }, // Spock ganha de tesoura
+      new { WinnerHandId = 5, LoserHandId = 4 }, // Lagarto ganha de spock
+      new { WinnerHandId = 5, LoserHandId = 2 }  // Lagarto ganha de papel
+    );
   }
 
 }
