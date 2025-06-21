@@ -18,7 +18,7 @@ public class RoundDto
   public required IEnumerable<string> PendingUsers { get; set; }
 }
 
-public class RoundResultsDto
+public class RoundResultDto
 {
   public required List<string> Winners { get; set; }
 }

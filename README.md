@@ -97,4 +97,4 @@ Abaixo seguem as rotas criadas para a API REST. Essas informações poderão ser
 
 ### Exemplos de Chamadas à API
 
-TBD
+A documentação da API pode ser vista tanto pelo Swagger (em `http://localhost:5176/swagger` ao executar o projeto) quanto na [**documentação completa criada no Postman** (recomendado)](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi).

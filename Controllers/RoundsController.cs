@@ -234,7 +234,7 @@ public class RoundsController(
   /// Erro, ou um objeto com os vencedores.
   /// </returns>
   [HttpPost("{id}/finalize")]
-  [ProducesResponseType(typeof(RoundResultsDto), StatusCodes.Status200OK)]
+  [ProducesResponseType(typeof(RoundResultDto), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -298,6 +298,6 @@ public class RoundsController(
     // Finaliza a rodada
     round.Status = RoundStatus.Closed;
     await _roundService.UpdateAsync(round);
-    return Ok(new RoundResultsDto { Winners = winners });
+    return Ok(new RoundResultDto { Winners = winners });
   }
 }
