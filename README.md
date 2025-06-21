@@ -29,22 +29,28 @@ Para rodar, é preciso ter instalado no seu sistema:
 
 Após essa etapa, siga os seguintes passos:
 
-1. Renomeie `.env.template` para `.env`. Isso carregará as variáveis de ambiente no container do Docker.
-2. Para rodar em modo de desenvolvimento (com `dotnet watch` rodando):
+1. Vá ao diretório do projeto:
+
+    ```bash
+    cd JokenpoApiRest
+    ```
+
+2. Renomeie `.env.template` para `.env`. Isso carregará as variáveis de ambiente no container do Docker.
+3. Para rodar em modo de desenvolvimento (com `dotnet watch` rodando):
 
     ```bash
     docker compose up     # para rodar
     docker compose down   # para terminar
     ```
 
-3. Para rodar em modo de produção:
+4. Para rodar em modo de produção:
 
     ```bash
     docker compose -f docker-compose.prod.yaml up -d    # para rodar
     docker compose -f docker-compose.prod.yaml down     # para terminar
     ```
 
-4. Para rodar as migrations (no modo de desenvolvimento), execute os seguintes comandos:
+5. Para rodar as migrations (no modo de desenvolvimento), execute os seguintes comandos:
 
     ```bash
     export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres" && dotnet ef database update
