@@ -2,7 +2,7 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JokenpoApiRest", "JokenpoApiRest.csproj", "{8B51BD49-640F-4945-EFE5-AFA9E752756B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JokenpoApiRest", "JokenpoApiRest/JokenpoApiRest.csproj", "{8B51BD49-640F-4945-EFE5-AFA9E752756B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
