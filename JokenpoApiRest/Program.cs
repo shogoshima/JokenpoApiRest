@@ -19,6 +19,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoundService, RoundService>();
 builder.Services.AddScoped<IHandService, HandService>();
 builder.Services.AddScoped<IHandRelationService, HandRelationService>();
+builder.Services.AddScoped<IRoundFinalizerService, RoundFinalizerService>();
 
 // Registra supoerte a controllers com atributos (essencial para webapi)
 builder.Services.AddControllers();
