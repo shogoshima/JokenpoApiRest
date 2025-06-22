@@ -2,7 +2,7 @@
 
 ## Introdução
 
-Este é um projeto para o desafio técnico do processo seletivo da **BTG Pactual**. O projeto consiste em um sistema que disponibiliza APIs REST para realizar as atividades de um jogo de jokenpo.
+Este é um projeto para o desafio técnico do processo seletivo da vaga de estágio na **BTG Pactual**. O projeto consiste em um sistema que disponibiliza APIs REST para realizar as atividades de um jogo de jokenpo.
 
 A documentação completa da API está [**__nesse link__**](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi).
 
@@ -97,22 +97,32 @@ Abaixo seguem as rotas criadas para a API REST. Essas informações poderão ser
 
 **Rotas para usuários:**
 
-- `POST /users`: Cadastrar (caso não exista) o usuário no sistema.
-- `GET /users/{userId}/rounds`: Listar todas as rodadas em que o usuário participou
+- `POST /api/users`: Cadastrar (caso não exista) o usuário no sistema.
+- `GET /api/users/{userId}/rounds`: Listar todas as rodadas em que o usuário participou.
+
+**Rotas para jogadas:**
+
+- `GET /api/hands`: Listar todas as jogadas possíveis.
 
 **Rotas para rodadas:**
 
-- `GET /rounds/current`: Consultar a situação da rodada aberta atual.
-- `GET /rounds/{roundId}`: Consultar a situação de uma rodada específica.
-- `POST /rounds`: Criar uma nova rodada (retorna erro se já houver uma rodada aberta).
-- `POST /rounds/{roundId}/participations`: Cadastrar o usuário na rodada (com ou sem jogada).
-- `PUT /rounds/{roundId}/participations`: Atualizar a jogada do usuário na rodada.
-- `DELETE /rounds/{roundId}/participations/{userId}`: Remover a participação do usuário na rodada (se ela ainda estiver aberta).
-- `POST /rounds/{roundId}/finalize`: Finalizar a rodada atual. Muda status para "closed", calcula vencedor e retorna resultado.
+- `GET /api/rounds/current`: Consultar a situação da rodada aberta atual.
+- `GET /api/rounds/{roundId}`: Consultar a situação de uma rodada específica.
+- `POST /api/rounds`: Criar uma nova rodada (retorna erro se já houver uma rodada aberta).
+- `POST /api/rounds/{roundId}/participations`: Cadastrar o usuário na rodada (com ou sem jogada).
+- `PUT /api/rounds/{roundId}/participations`: Atualizar a jogada do usuário na rodada.
+- `DELETE /api/rounds/{roundId}/participations/{userId}`: Remover a participação do usuário na rodada (se ela ainda estiver aberta).
+- `POST /api/rounds/{roundId}/finalize`: Finalizar a rodada atual. Muda status para "closed", calcula vencedor e retorna resultado.
 
 ## Exemplos de Chamadas à API
 
-A documentação da API pode ser vista tanto pelo Swagger (em `http://localhost:5176/swagger` ao executar o projeto) quanto na [**documentação completa criada no Postman** (recomendado)](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi).
+Caso se queira consultar exemplos de chamadas e respostas da API, consulte a [**documentação completa criada no Postman**](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi):
+
+![Print de parte da documentação no Postman](postman.png)
+
+A documentação da API, com a estrutura esperada das respostas, também pode ser vista no Swagger (em `http://localhost:5176/swagger` ao executar o projeto):
+
+![Documentação no Swagger](swagger.png)
 
 ### Exemplos de Possíveis Cenários
 
@@ -120,7 +130,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
 
 #### Cenário 1 (Sucesso)
 
-1. Rota `POST /users` para cadastrar usuários no sistema:
+1. Rota `POST /api/users` para cadastrar usuários no sistema:
     - Usuário 1: Carlos
       ```json
       {
@@ -160,7 +170,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
         "name": "Matheus"
       }
       ```
-2. Rota `POST /rounds` para criar uma rodada nova. Retorna: 
+2. Rota `POST /api/rounds` para criar uma rodada nova. Retorna: 
     ```json
     {
       "id": 1,
@@ -168,7 +178,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
       "createdAt": "2025-06-21T05:07:15.9537005Z"
     }
     ```
-3. Rota `POST /rounds/1/participations` para cadastrar usuário na rodada 1:
+3. Rota `POST /api/rounds/1/participations` para cadastrar usuário na rodada 1:
     - Usuário 1: Carlos joga pedra (handId = 1)
       ```json
       {
@@ -189,7 +199,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
         "userId": 3
       }
       ```
-4. Rota `GET /rounds/current` para consultar a situação da rodada atual. Retorna:
+4. Rota `GET /api/rounds/current` para consultar a situação da rodada atual. Retorna:
     ```json
     {
       "data": {
@@ -206,7 +216,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
       ]
     }
     ```
-5. Rota `PUT /rounds/1/participations` para atualizar a jogada na rodada 1:
+5. Rota `PUT /api/rounds/1/participations` para atualizar a jogada na rodada 1:
     - Usuário 3: Matheus joga tesoura (handId = 3)
       ```json
       {
@@ -214,18 +224,31 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
         "handId": 3
       }
       ```
-6. Rota `POST /rounds/1/finalize` para finalizar a rodada 1. Retorna:
+6. Rota `POST /api/rounds/1/finalize` para finalizar a rodada 1. Retorna:
     ```json
     {
-      "winners": [
-        "Carlos"
+      "message": "Temos um vencedor!",
+      "winners": ["Carlos"],
+      "participations": [
+        {
+          "name": "Carlos",
+          "handName": "Pedra"
+        },
+        {
+          "name": "João",
+          "handName": "Tesoura"
+        },
+        {
+          "name": "Matheus",
+          "handName": "Tesoura"
+        }
       ]
     }
     ```
 
 #### Cenário 2 (Falha)
 
-1. Rota `POST /users` para cadastrar usuários no sistema:
+1. Rota `POST /api/users` para cadastrar usuários no sistema:
     - Usuário 1: Carlos
       ```json
       {
@@ -265,7 +288,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
         "name": "Matheus"
       }
       ```
-2. Rota `POST /rounds` para criar uma rodada nova. Retorna: 
+2. Rota `POST /api/rounds` para criar uma rodada nova. Retorna: 
     ```json
     {
       "id": 1,
@@ -273,7 +296,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
       "createdAt": "2025-06-21T05:07:15.9537005Z"
     }
     ```
-3. Rota `POST /rounds/1/participations` para cadastrar usuário na rodada 1:
+3. Rota `POST /api/rounds/1/participations` para cadastrar usuário na rodada 1:
     - Usuário 1: Carlos joga pedra (handId = 1)
       ```json
       {
@@ -294,7 +317,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
         "userId": 3
       }
       ```
-4. Rota `POST /rounds/1/finalize` para finalizar a rodada 1. Retorna erro:
+4. Rota `POST /api/rounds/1/finalize` para finalizar a rodada 1. Retorna erro:
     ```json
     {
       "message": "Ainda faltam jogadas de alguns participantes.",
@@ -306,7 +329,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
 
 #### Cenário 3 (Falha)
 
-1. Rota `POST /rounds` para criar uma rodada nova. Retorna: 
+1. Rota `POST /api/rounds` para criar uma rodada nova. Retorna: 
     ```json
     {
       "id": 1,
@@ -314,7 +337,7 @@ Abaixo seguem exemplos de fluxo de utilização da API que constavam na especifi
       "createdAt": "2025-06-21T05:07:15.9537005Z"
     }
     ```
-2. Rota `POST /rounds/1/participations` para cadastrar usuário na rodada 1:
+2. Rota `POST /api/rounds/1/participations` para cadastrar usuário na rodada 1:
     - Jogada jogador 1
       ```json
       {
