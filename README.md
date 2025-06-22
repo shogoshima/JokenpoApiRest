@@ -2,9 +2,11 @@
 
 ## Introdução
 
-Este é um projeto para o desafio técnico do processo seletivo da vaga de estágio na **BTG Pactual**. O projeto consiste em um sistema que disponibiliza APIs REST para realizar as atividades de um jogo de jokenpo.
+Este é um projeto para o desafio técnico do processo seletivo da vaga de estágio na **BTG Pactual**. O projeto consiste em um sistema backend que disponibiliza APIs REST para realizar as atividades de um jogo de jokenpo.
 
-A documentação completa da API está [**__nesse link__**](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi).
+A documentação completa da API está [**nesse link**](https://documenter.getpostman.com/view/39631274/2sB2xBDpsi).
+
+O projeto está em produção em https://shogoshima.duckdns.org.
 
 ### Funcionalidades
 
@@ -25,7 +27,7 @@ O sistema terá as seguintes funcionalidades:
 Para rodar, é preciso ter instalado no seu sistema:
 
 - Docker
-- SDK .NET
+- .NET 8.0 SDK
 
 Após essa etapa, siga os seguintes passos:
 
@@ -56,6 +58,8 @@ Após essa etapa, siga os seguintes passos:
     export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres" && dotnet ef database update
     ```
 
+    > Altere `Database`, `Username` e `Password` conforme o necessário (caso rode em produção).
+
 ## Decisões de Arquitetura
 
 ### Tecnologias Escolhidas
@@ -64,6 +68,7 @@ Após essa etapa, siga os seguintes passos:
 - **Docker:** O Docker foi escolhido para isolar o projeto, facilitar a execução do projeto e otimizar o fluxo de desenvolvimento.
 - **PostgreSQL:** O banco de dados escolhido foi o PostgreSQL, devido à maior experiência do autor com ele, incluindo a familiaridade com o PgAdmin. Apesar da utilização do banco de dados não ser obrigatória, decidiu-se por utilizar considerando um sistema escalável.
 - **Postman:** O Postman foi escolhido para documentar a API de forma mais adequada, já que permite a visualização de requisições exemplo, e a explicação mais detalhada delas.
+- **AWS EC2**: O projeto está em produção pode meio do serviço EC2 da AWS. Isso foi feito tanto para poder visualizar o resultado de forma mais fácil, quanto para certificar-se de que o projeto roda facilmente em outras máquinas.
 
 ### Modelagem do Banco de dados
 
